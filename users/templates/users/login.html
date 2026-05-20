@@ -1,0 +1,29 @@
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход | Deadline Tracker</title>
+    <link rel="stylesheet" href="{% static 'users/style.css' %}">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>С возвращением</h2>
+            <p class="subtitle">Войдите, чтобы проверить дедлайны</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="btn-primary">Войти</button>
+            </form>
+
+            <div class="auth-footer">
+                <span>Нет аккаунта?</span>
+                <a href="{% url 'register' %}">Создать профиль</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

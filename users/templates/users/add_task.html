@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if edit_mode %}Редактирование{% else %}Новая задача{% endif %} | Deadline Tracker</title>
+    <link rel="stylesheet" href="{% static 'users/style.css' %}">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>{% if edit_mode %}Редактирование{% else %}Новый дедлайн{% endif %}</h2>
+            <p class="subtitle">
+                {% if edit_mode %}Измените детали задачи{% else %}Заполни детали учебной задачи{% endif %}
+            </p>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    {{ form.as_p }}
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    {% if edit_mode %}Сохранить изменения{% else %}Создать задачу{% endif %}
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <a href="{% url 'index' %}" style="color: #94a3b8; text-decoration: none;">← Вернуться назад</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

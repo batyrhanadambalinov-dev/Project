@@ -1,0 +1,261 @@
+/* Общие настройки */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #0f172a;
+    color: #f1f5f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Контейнер формы */
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.auth-box {
+    background-color: #1e293b;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+h2 {
+    margin-top: 0;
+    color: #38bdf8;
+    font-size: 24px;
+}
+
+.subtitle {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* Стилизация стандартных Django полей */
+.input-group p {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: white;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: #38bdf8;
+    outline: none;
+}
+
+/* Кнопки */
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background-color: #38bdf8;
+    color: #0f172a;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background-color: #7dd3fc;
+}
+
+/* Ссылка под формой */
+.auth-footer {
+    margin-top: 25px;
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+.auth-footer a {
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Список ошибок */
+.errorlist {
+    color: #fb7185;
+    list-style: none;
+    padding: 0;
+    font-size: 12px;
+    text-align: left;
+}
+
+/* Главный контейнер */
+.dashboard-container {
+    width: 100%;
+    max-width: 1200px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    margin-bottom: 30px;
+}
+
+.logo h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.logo span {
+    color: #38bdf8;
+}
+
+/* Кнопки в шапке */
+.btn-add {
+    background-color: #38bdf8;
+    color: #0f172a;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-logout-link {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+/* Сетка карточек */
+.task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.task-card {
+    background-color: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #334155;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.task-card:hover {
+    transform: translateY(-5px);
+    border-color: #38bdf8;
+}
+
+.task-card.is-done {
+    opacity: 0.6;
+    border-color: #4ade80;
+}
+
+.subject-tag {
+    font-size: 11px;
+    text-transform: uppercase;
+    background-color: #0f172a;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #38bdf8;
+}
+
+.task-title {
+    margin: 15px 0;
+    font-size: 18px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.status-text {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.status-text.late { color: #fb7185; font-weight: bold; }
+.status-text.done { color: #4ade80; }
+
+.btn-complete {
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.delete-icon {
+    text-decoration: none;
+    color: #475569;
+    font-size: 14px;
+}
+
+.delete-icon:hover { color: #fb7185; }
+
+/* Цвета срочности */
+.urgency-critical { border-left: 5px solid #fb7185 !important; } /* Красный */
+.urgency-medium { border-left: 5px solid #fbbf24 !important; }   /* Желтый */
+.urgency-low { border-left: 5px solid #38bdf8 !important; }      /* Синий */
+
+/* Стиль для текста "Срочно" */
+.status-text.critical { color: #fb7185; font-weight: bold; }
+
+.edit-icon {
+    display: inline-block !important; /* Принудительно показываем */
+    text-decoration: none;
+    font-size: 18px;
+    margin-right: 15px;
+    color: #ffffff; /* Белый цвет, чтобы точно было видно */
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+.edit-icon:hover {
+    opacity: 1;
+    transform: scale(1.2);
+    color: #38bdf8; /* Станет голубым при наведении */
+}
+
+/* Убедись, что корзина тоже на месте */
+.delete-icon {
+    display: inline-block !important;
+    text-decoration: none;
+    font-size: 18px;
+    opacity: 0.6;
+}

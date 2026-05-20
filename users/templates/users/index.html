@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная | Deadline Tracker</title>
+    <link rel="stylesheet" href="{% static 'users/style.css' %}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="main-header">
+            <div class="logo">
+                <h1>Deadline<span>Tracker</span></h1>
+                {% if active_count > 0 %}
+                    <span style="font-size: 14px; color: #94a3b8; margin-left: 10px;">
+                    У вас {{ active_count }} активных задач
+                    </span>
+                {% endif %}
+            </div>
+            <nav class="nav-actions">
+                <a href="{% url 'profile' %}" style="color: #94a3b8; text-decoration: none; margin-right: 15px; align-self: center;">Профиль</a>
+                <a href="{% url 'add_task' %}" class="btn-add">+ Новая задача</a>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout-link">Выйти</button>
+                </form>
+            </nav>
+        </header>
+
+        <main class="content">
+            <div class="filter-bar" style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="{% url 'index' %}" class="filter-item">Все</a>
+                {% for sub in subjects %}
+                    <a href="{% url 'index' %}?subject={{ sub }}" class="filter-item">{{ sub }}</a>
+                {% endfor %}
+            </div>
+
+            <div class="task-grid">
+                {% for task in tasks %}
+                    <div class="task-card
+                        {% if task.completed %}is-done
+                        {% elif task.days_left <= 2 %}urgency-critical
+                        {% elif task.days_left <= 5 %}urgency-medium
+                        {% else %}urgency-low
+                        {% endif %}">
+
+                        <div class="card-header">
+                            <span class="subject-tag">{{ task.subject }}</span>
+                            <div class="card-menu">
+                                {% if task.id %}
+                                    <a href="{% url 'edit_task' task.id %}" class="edit-icon" title="Редактировать">✏️</a>
+                                    <a href="{% url 'delete_task' task.id %}" class="delete-icon" onclick="return confirm('Удалить задачу?')">🗑</a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <h3 class="task-title">{{ task.title }}</h3>
+
+                        <div class="card-footer">
+                            <div class="deadline-info">
+                                <span class="clock-icon">🕒</span>
+                                {% if task.completed %}
+                                    <span class="status-text done">Выполнено</span>
+                                {% elif task.days_left < 0 %}
+                                    <span class="status-text critical">Просрочено!</span>
+                                {% elif task.days_left <= 2 %}
+                                    <span class="status-text critical">Срочно: {{ task.days_left }} дн.</span>
+                                {% else %}
+                                    <span class="status-text">Осталось: {{ task.days_left }} дн.</span>
+                                {% endif %}
+                            </div>
+
+                            {% if task.id %}
+                            <a href="{% url 'complete_task' task.id %}" class="btn-complete">
+                                {% if task.completed %}↩{% else %}✅{% endif %}
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="empty-state">
+                        <p>Задач пока нет. Время отдыхать!</p>
+                        <a href="{% url 'add_task' %}">Создать первый дедлайн</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

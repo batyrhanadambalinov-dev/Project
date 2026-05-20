@@ -1,0 +1,274 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль | Deadline Tracker</title>
+    <link rel="stylesheet" href="{% static 'users/style.css' %}">
+    <style>
+        /* Дополнительные стили специально для страницы профиля,
+           чтобы она вписывалась в общую стилистику */
+        .profile-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-card {
+            background-color: #1e1e24; /* Такой же фон, как у карточек задач */
+            border: 1px solid #3f3f46;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .profile-header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #3f3f46;
+            padding-bottom: 15px;
+        }
+
+        .profile-header h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        .profile-header .username {
+            color: #38bdf8; /* Голубой акцентный цвет */
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            background-color: rgba(63, 63, 70, 0.3); /* Полупрозрачный фон */
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            border: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .stat-item:hover {
+            border-color: #3f3f46;
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        /* Цветовые акценты для статусов, как на главной */
+        .stat-item.completed .stat-value {
+            color: #4ade80; /* Зеленый для выполненных */
+        }
+
+        .stat-item.failed .stat-value {
+            color: #f87171; /* Красный для просроченных */
+        }
+
+        /* Стили для прогресс-бара продуктивности */
+        .productivity-section {
+            background-color: rgba(63, 63, 70, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #3f3f46;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .productivity-label {
+            color: #cbd5e1;
+            margin-bottom: 15px;
+            font-size: 16px;
+            display: block;
+        }
+
+        .progress-container {
+            background-color: #111114; /* Темный фон */
+            border-radius: 20px;
+            height: 25px;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid #3f3f46;
+            position: relative;
+        }
+
+        .progress-bar {
+            background-color: #22c55e; /* Зеленый цвет прогресса */
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            box-sizing: border-box;
+        }
+
+        .progress-text {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Дополнительные стили для блока Telegram */
+        .telegram-section {
+            background: rgba(56, 189, 248, 0.08);
+            padding: 22px;
+            border-radius: 8px;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            text-align: left;
+        }
+
+        .telegram-title {
+            margin: 0 0 12px 0;
+            color: #38bdf8;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .telegram-code-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #111114;
+            padding: 12px 18px;
+            border-radius: 6px;
+            border: 1px solid #3f3f46;
+            margin-top: 15px;
+        }
+
+        .btn-telegram {
+            background: #38bdf8;
+            color: #1e1e24;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-telegram:hover {
+            background: #7dd3fc;
+            transform: translateY(-1px);
+        }
+
+        .profile-footer {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .btn-back {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .btn-back:hover {
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <header class="main-header">
+            <div class="logo">
+                <h1>Deadline<span>Tracker</span></h1>
+            </div>
+            <nav class="nav-actions">
+                <a href="{% url 'profile' %}" class="nav-link active">Профиль</a>
+                <a href="{% url 'add_task' %}" class="btn-add">+ Новая задача</a>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout-link">Выйти</button>
+                </form>
+            </nav>
+        </header>
+
+        <main class="content profile-container">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <h2>Профиль пользователя: <span class="username">{{ user.username }}</span></h2>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Всего задач</span>
+                        <span class="stat-value">{{ total_tasks }}</span>
+                    </div>
+                    <div class="stat-item completed">
+                        <span class="stat-label">Выполнено</span>
+                        <span class="stat-value">{{ completed_tasks }}</span>
+                    </div>
+                    <div class="stat-item failed">
+                        <span class="stat-label">Просрочено</span>
+                        <span class="stat-value">{{ failed_tasks }}</span>
+                    </div>
+                </div>
+
+                <div class="productivity-section">
+                    <span class="productivity-label">Ваша продуктивность</span>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: {{ productivity_rate }}%;">
+                            <span class="progress-text">{{ productivity_rate }}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="telegram-section">
+                    <div class="telegram-title">✈️ Уведомления в Telegram</div>
+
+                    {% if telegram_chat_id %}
+                        <p style="color: #4ade80; margin: 5px 0 0 0; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                            <span>✓</span> Telegram успешно привязан! Вы будете получать напоминания о сроках.
+                        </p>
+                    {% else %}
+                        <p style="color: #cbd5e1; margin: 0; font-size: 14px; line-height: 1.5;">
+                            Хотите вовремя узнавать о «горящих» дедлайнах? Привяжите нашего бота, чтобы он присылал уведомления прямо в мессенджер.
+                        </p>
+
+                        <div class="telegram-code-box">
+                            <div>
+                                <span style="color: #94a3b8; font-size: 11px; display: block; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px;">Ваш код привязки:</span>
+                                <strong style="color: #ffffff; font-size: 20px; letter-spacing: 1.5px; font-family: monospace;">{{ tg_auth_code }}</strong>
+                            </div>
+                            <a href="https://t.me/{{ bot_username }}?start={{ tg_auth_code }}" target="_blank" class="btn-telegram">
+                                Открыть бота
+                            </a>
+                        </div>
+
+                        <small style="color: #94a3b8; display: block; margin-top: 12px; font-size: 12px; line-height: 1.4;">
+                            Кликните на кнопку выше, запустите бота в Telegram (нажмите кнопку Начать или /start) — и привязка выполнится автоматически.
+                        </small>
+                    {% endif %}
+                </div>
+
+                <div class="profile-footer">
+                    <a href="{% url 'index' %}" class="btn-back">← Вернуться к задачам</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
